@@ -21,11 +21,10 @@ white = (255, 255, 255)
 green = (0,128,0)
 
 def clear():
-    #이거 제대로 안됨 -- 2020-08-17
-    cv.delete ("all")
     ##Clear 에 대한 생각을 변경
     ## 현재 내가 사용하는 코드에선 사용자에게 보이는 line 과 컴퓨터가 인식하는 line 두가지가 존재
     ## 컴퓨터가 인식하는 line 을 지우는 것이 아닌 엄청 두꺼운 흰색 선을 다시 그리게 함으로써 캔버스를 깨끗이 한 것 같은 효과 줌
+    cv.delete ("all")
     filename = "saveImage\\image.png"
     draw.line((0, 0, 400, 0),fill="white",width=800)
     image.save(filename)
