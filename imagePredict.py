@@ -1,3 +1,5 @@
+## 목표 clear 기능 돌아가게 만들기
+
 import cv2
 from PIL import ImageTk, Image, ImageDraw
 import PIL
@@ -10,7 +12,7 @@ from collections import deque
 import os
 from playsound import playsound
 
-from PIL import ImageTk,ImageGrab
+from PIL import ImageTk,ImageGrab,Image
 
 width = 400
 height = 400
@@ -18,23 +20,16 @@ center = height//2
 white = (255, 255, 255)
 green = (0,128,0)
 
-width2 = width*2
-height2 = height*2
-
-def save():
-    # PIL image can be saved as .png .jpg .gif or .bmp file (among others)
-    # filename = "my_drawing.png"
-    # image1.save(filename)
-    #놔두긴 했는데 지워도 될듯
-    filename = "saveImage\\MyDraw.png"
-    image.save(filename)
-    
 def clear():
     #이거 제대로 안됨 -- 2020-08-17
-    cv.delete ( "all")
-    image = PIL.Image.new("RGB", (width, height), white)
-    draw = ImageDraw.Draw(image)
-    
+    cv.delete ("all")
+    ##Clear 에 대한 생각을 변경
+    ## 현재 내가 사용하는 코드에선 사용자에게 보이는 line 과 컴퓨터가 인식하는 line 두가지가 존재
+    ## 컴퓨터가 인식하는 line 을 지우는 것이 아닌 엄청 두꺼운 흰색 선을 다시 그리게 함으로써 캔버스를 깨끗이 한 것 같은 효과 줌
+    filename = "saveImage\\image.png"
+    draw.line((0, 0, 400, 0),fill="white",width=800)
+    image.save(filename)
+
 def predict():
     filename = "saveImage\\image.png"
     image.save(filename)
@@ -130,7 +125,9 @@ def paint(event):
     x1, y1 = event.x, event.y
     if cv.old_coords:
         x2, y2 = cv.old_coords
+        ## 사용자에게 시각적으로 보여주기 위한 line
         cv.create_line(x1, y1, x2, y2, fill="black",width=5)
+        ## 실제로 컴퓨터가 인식하는 line
         draw.line([x1, y1, x2, y2],fill="black",width=5)
     cv.old_coords = x1, y1
     
@@ -166,6 +163,7 @@ def get_QD_emojis():
         emojis.append(cv2.imread(emojis_folder + str(emoji) + '.png', -1))
     return emojis
 
+
 root = Tk()
 root.geometry("800x420")
 
@@ -198,11 +196,8 @@ label.place(x=400, y=20, width=400, height=360)
 button=Button(text="clear",command=clear)
 button.place(x=0, y=400, width=100, height=20)
 
-button=Button(text="save",command=save)
-button.place(x=300, y=400, width=100, height=20)
-
 button=Button(text="predict",command=predict)
-button.place(x=150, y=400, width=100, height=20)
+button.place(x=300, y=400, width=100, height=20)
 
 button=Button(text="voice",command=voice)
 button.place(x=550, y=350, width=100, height=20)
